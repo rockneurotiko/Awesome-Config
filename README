@@ -1,0 +1,35 @@
+This is my configuration for Awesome WM.
+
+It is in continuos renoval, so, check it :)
+
+Right now have:
+
+Personalized tags.
+
+Personalized Rules for programs
+
+Clock & calendar widget
+
+Battery widget
+
+Up/down kb/s widget
+
+Wifi widget
+
+CPU usage widget
+
+Volume widget!!!
+
+
+Specials:
+My configuration needs wicd, and xlock, if you want to use it full.
+
+If you push Mod4+b, the screen locks.  (b --> block :P)
+
+Left click in the volume widget, it opens alsamixer, and right click mute and umute.
+
+Left click in Wifi widget will open wicd-client :)
+
+
+
+Cheers!
