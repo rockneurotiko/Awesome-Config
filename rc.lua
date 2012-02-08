@@ -68,15 +68,16 @@ layouts =
 --So, feel free to change it, but remember, the same names than layouts, and
 --after remember to erase the rules, and make news if you want it :)
 tags = {
-  names = { "Mail", "Web", "Terms", "Media","Spotify", "emacs", "Downs", "Pdf's", 9},
+  names = { "Mail", "Web", "Terms", "Media","Spotify", "emacs", "Downs", "Pdf's", "Programacion", "Otros"},
   layout = {
     layouts[1], layouts[1], layouts[5],
     layouts[5], layouts[1], layouts[1],
-    layouts[1], layouts[1], layouts[12],
+    layouts[1], layouts[1], layouts[4],
+    layouts[1],
   }}
 for s = 1, screen.count() do
     -- Each screen has its own tag table.
-    tags[s] = awful.tag({ "Mail", "Web", "Terms", "Media", "Spotify", "emacs", "Downs", "Pdf's", 9 }, s, layouts[1])
+    tags[s] = awful.tag({ "Mail", "Web", "Terms", "Media", "Spotify", "emacs", "Downs", "Pdf's", "Programacion", "Otros" }, s, layouts[1])
 end
 -- }}}
 
@@ -513,6 +514,11 @@ awful.rules.rules = {
     { rule = { class = "Ktorrent"},
       properties = { tag = tags[1][7], switchtotag=true}},
 
+    { rule = { class = "Eclipse"},
+      properties = { tag = tags[1][9], switchtotag=true}},
+
+    { rule = { class = "Wicd"},
+      properties = { tag = tags[1][10], switchtotag=true}},
 
 }
 
