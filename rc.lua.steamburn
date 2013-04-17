@@ -1,14 +1,7 @@
---[[             Original                ]]--
+--[[                                     ]]--
 --                                         -
 --    Steamburn Awesome WM 3.5.+ config    --
 --        github.com/copycat-killer        --
---                                          -
---[[                                     ]]--
-
---[[            Modified by:             ]]--
---                                         -
---              Rock Neurotiko             --
---        github.com/rockneurotiko         --
 --                                          -
 --[[                                     ]]--
 
@@ -38,6 +31,7 @@ function run_once(cmd)
  end
 
 -- autostart applications
+run_once("urxvtd")
 run_once("unclutter -idle 10")
 
 
@@ -82,11 +76,12 @@ active_theme = themes .. "/steamburn"
 
 beautiful.init(active_theme .. "/theme.lua")
 
-terminal = "gnome-terminal"
-editor = "vim"
-gui_editor = "gedit"
-browser = "firefox"
-browser2 = "links"
+terminal = "urxvtc"
+editor = os.getenv("EDITOR")
+--editor_cmd = terminal .. " -e " .. editor
+gui_editor = "geany -ps"
+browser = "dwb"
+browser2 = "midori"
 mail = terminal .. " -e mutt "
 chat = terminal .. " -e irssi "
 tasks = terminal .. " -e htop "
@@ -124,8 +119,8 @@ end
 -- Tags
 
 tags = {
-       names = { "web", "term", "reditr", "media", "down", "pdf", "code"},
-       layout = { layouts[1], layouts[3], layouts[1], layouts[1], layouts[7], layouts[1], layouts[1] }
+       names = { "web", "term", "docs", "media", "down"},
+       layout = { layouts[1], layouts[3], layouts[4], layouts[1], layouts[7] }
        }
 for s = 1, screen.count() do
    tags[s] = awful.tag(tags.names, s, tags.layout)
@@ -133,38 +128,34 @@ end
 
 -- Menu
 myaccessories = {
-   { "archives", "j7z" },
+   { "archives", "7zFM" },
    { "file manager", "spacefm" },
-   { "editor", gui_editor }
+   { "editor", gui_editor },
 }
 myinternet = {
     { "browser", browser },
     { "irc client" , chat },
     { "torrent" , "rtorrent" },
-    --{ "torrtux" , terminal .. " -e torrtux " },
-    --{ "torrent search" , "torrent-search" }
+    { "torrtux" , terminal .. " -e torrtux " },
+    { "torrent search" , "torrent-search" }
 }
 mygames = {
-    { "Moto", "xmoto" },
-    --{ "Super NES", "zsnes"}
+    { "NES", "fceux" },
+    { "Super NES", "zsnes" },
 }
 mygraphics = {
-    --{ "gimp" , "gimp" },
-    --{ "inkscape", "inkscape" },
-    { "Darktable", "darktable" },
-    { "Raw Therapee", "rawtherapee" },
+    { "gimp" , "gimp" },
+    { "inkscape", "inkscape" },
     { "dia", "dia" },
     { "image viewer" , "viewnior" }
 }
-
 myoffice = {
-    { "Libre office", "libreoffice" }
-    --{ "writer" , "lowriter" },
-    --{ "impress" , "loimpress" },
+    { "writer" , "lowriter" },
+    { "impress" , "loimpress" },
 }
 mysystem = {
-    --{ "appearance" , "lxappearance" },
-    --{ "cleaning" , "bleachbit" },
+    { "appearance" , "lxappearance" },
+    { "cleaning" , "bleachbit" },
     { "powertop" , terminal .. " -e sudo powertop " },
     { "task manager" , tasks }
 }
@@ -376,27 +367,11 @@ vicious.register(cpuwidget, vicious.widgets.cpu, gray .. "Cpu " .. coldef .. whi
 cpuicon:buttons(awful.util.table.join(awful.button({ }, 1, function () awful.util.spawn(tasks, false) end)))
 
 -- Temp widget
---tempicon = wibox.widget.imagebox()
---tempicon:set_image(beautiful.widget_temp)
---tempicon:buttons(awful.util.table.join(awful.button({ }, 1, function () awful.util.spawn(terminal .. " -e sudo powertop ", false) end)))
---tempwidget = wibox.widget.textbox()
---vicious.register(tempwidget, vicious.widgets.thermal, gray .. "Temp " .. coldef .. white .. "$1 " .. coldef, 9, {"coretemp.0", "core"} )
---vicious.register(tempwidget, vicious.widgets.thermal,
---function(widget, args)
---    local filedescriptor = io.popen('cat /proc/i8k | cut -c20')
---    local value = filedescriptor:read()
---    filedescriptor:close()
---    if value == '0' then
---       return args[1]
---    elseif value == '1' then
---       return "<span color='#2e7300'> ".. args[1] .. "ºC</span>"
---    elseif value == '2' then
---       return "<span color='#990f00'> ".. args[1] .. "ºC</span>"
---    end
---end, 5, "thermal_zone0")
- 
-
-
+tempicon = wibox.widget.imagebox()
+tempicon:set_image(beautiful.widget_temp)
+tempicon:buttons(awful.util.table.join(awful.button({ }, 1, function () awful.util.spawn(terminal .. " -e sudo powertop ", false) end)))
+tempwidget = wibox.widget.textbox()
+vicious.register(tempwidget, vicious.widgets.thermal, gray .. "Temp " .. coldef .. white .. "$1 " .. coldef, 9, {"coretemp.0", "core"} )
 
 local infos = nil
 
@@ -508,19 +483,19 @@ neticon:set_image(beautiful.widget_net)
 netwidget:buttons(awful.util.table.join(awful.button({ }, 1, function () awful.util.spawn_with_shell(wifi) end)))
 
 -- Weather widget
---weatherwidget = wibox.widget.textbox()
---vicious.register(weatherwidget, vicious.widgets.weather,
---    function (widget, args)
---        if args["{tempf}"] == "N/A" then
---            return gray .. "No " .. coldef .. white .. "Info " .. coldef
---        else
---            -- work in progress 
---            if( args["{sky}"] == "N/A" or string.find(args["{sky}"], "Clear") ~= nil ) then args["{sky}"] = "<span font=\"Symbola 10\" rise=\"-1535\">☼</span>"
---            elseif( string.find(args["{sky}"], "Cloudy") ~= nil ) then args["{sky}"] = "<span font=\"Symbola 11\" rise=\"-1620\">☁</span>"
---            end
---            return gray .. args["{sky}"] .. coldef .. " " .. white .. args["{tempc}"] .. " " .. coldef
---        end
---    end, 1800, "LETO" )
+weatherwidget = wibox.widget.textbox()
+vicious.register(weatherwidget, vicious.widgets.weather,
+    function (widget, args)
+        if args["{tempf}"] == "N/A" then
+            return gray .. "No " .. coldef .. white .. "Info " .. coldef
+        else
+            -- work in progress - ☂☔☃ ⛆⛇⛈ 🌂
+            if( args["{sky}"] == "N/A" or string.find(args["{sky}"], "Clear") ~= nil ) then args["{sky}"] = "<span font=\"Symbola 10\" rise=\"-1535\">☼</span>"
+            elseif( string.find(args["{sky}"], "Cloudy") ~= nil ) then args["{sky}"] = "<span font=\"Symbola 11\" rise=\"-1620\">☁</span>"
+            end
+            return gray .. args["{sky}"] .. coldef .. " " .. white .. args["{tempc}"] .. " " .. coldef
+        end
+    end, 1800, "ICAO-CODE-GOES-HERE" )
 
 -- Separators
 spr = wibox.widget.textbox(' ')
@@ -617,33 +592,22 @@ for s = 1, screen.count() do
     right_layout:add(spr)
     right_layout:add(mygmail)
     right_layout:add(spr)
-    right_layout:add(leftbr) --[
     right_layout:add(cpuwidget)
-    right_layout:add(rightbr) --]
     right_layout:add(spr)
-    right_layout:add(leftbr) --[
     right_layout:add(memwidget)
-    right_layout:add(rightbr) --]
     right_layout:add(spr)
-    right_layout:add(leftbr) --[
+    right_layout:add(tempwidget)
+    right_layout:add(spr)
+    right_layout:add(spr)
     right_layout:add(batwidget)
-    right_layout:add(rightbr) --]
     right_layout:add(spr)
-    right_layout:add(leftbr) --[
     right_layout:add(netwidget)
-    right_layout:add(rightbr) --]
     right_layout:add(spr)
-    right_layout:add(leftbr) --[
     right_layout:add(volumewidget)
-    right_layout:add(rightbr) --]
     right_layout:add(spr)
---    right_layout:add(leftbr) --[
---    right_layout:add(weatherwidget)
---    right_layout:add(rightbr) --]
---    right_layout:add(spr)
-    right_layout:add(leftbr) --[
+    right_layout:add(weatherwidget)
+    right_layout:add(spr)
     right_layout:add(mytextclock)
-    right_layout:add(rightbr) --]
     right_layout:add(spr)
 
     -- Now bring it all together (with the tasklist in the middle)
@@ -914,22 +878,6 @@ awful.rules.rules = {
 
     { rule = { class = "Torrent-search" },
           properties = { tag = tags[1][5] } },
-
-    { rule = { class = "Firefox" },
-          properties = { tag = tags[1][1] } },
-    
-    { rule = { class = "Gnome-terminal" },
-        properties = { tag = tags[1][2] } },
-    { rule = { class = "Reditr" },
-          properties = { tag = tags[1][3] } },
-    { rule = { class = "Vlc" },
-        properties = { tag = tags[1][4] } },
-    { rule = { class = "Evince" },
-        properties = { tag = tags[1][6] } },
-    { rule = { class = "Jdownloader" },
-        properties = { tag = tags[1][5] } },
-    { rule = { class = "Eclipse" },
-        properties = { tag = tags[1][7] } },
 }
 
 
