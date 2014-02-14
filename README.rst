@@ -2,7 +2,6 @@
 Awesome WM Copycats
 ===== 
 A collection of heavy modded themes for Awesome WM 3.5+ 
-The main rc.lua had already modified by myself.
 ---------
 
 Beware! They're more awesome than they appear, it's just they're shy.

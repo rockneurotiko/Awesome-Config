@@ -1,14 +1,7 @@
---[[             Original                ]]--
+--[[                                     ]]--
 --                                         -
 --    Steamburn Awesome WM 3.5.+ config    --
 --        github.com/copycat-killer        --
---                                          -
---[[                                     ]]--
-
---[[            Modified by:             ]]--
---                                         -
---              Rock Neurotiko             --
---        github.com/rockneurotiko         --
 --                                          -
 --[[                                     ]]--
 
@@ -39,6 +32,15 @@ function run_once(cmd)
 
 -- autostart applications
 run_once("unclutter -idle 10")
+run_once("setxkbmap -layout es -variant dvorak")
+--run_once("variety")
+run_once("guake")
+run_once("xscreensaver -no-splash")
+
+run_once("CopyAgent")
+run_once("nm-applet")
+
+run_once("amixer -c 1 set Speaker 100%")
 
 
 -- Localization
@@ -124,8 +126,8 @@ end
 -- Tags
 
 tags = {
-       names = { "web", "term", "reditr", "media", "down", "pdf", "code"},
-       layout = { layouts[1], layouts[3], layouts[1], layouts[1], layouts[7], layouts[1], layouts[1] }
+       names = { "web", "term", "reditr", "media", "down", "pdf", "code", "mail"},
+       layout = { layouts[1], layouts[3], layouts[1], layouts[1], layouts[7], layouts[1], layouts[1], layouts[1] }
        }
 for s = 1, screen.count() do
    tags[s] = awful.tag(tags.names, s, tags.layout)
@@ -146,6 +148,7 @@ myinternet = {
 }
 mygames = {
     { "Moto", "xmoto" },
+    { "Regnum Online", "./usr/local/regnum/rolauncher" },
     --{ "Super NES", "zsnes"}
 }
 mygraphics = {
@@ -460,8 +463,8 @@ function (widget, args)
   elseif (args[2] <= 5 and batstate() == 'Discharging') then
     baticon:set_image(beautiful.widget_battery_empty)
     naughty.notify({
-      text = "sto per spegnermi...",
-      title = "Carica quasi esaurita!",
+      text = "Yo que tu conectaba...",
+      title = "Bateria baja!",
       position = "top_right",
       timeout = 1,
       fg="#000000",
@@ -473,8 +476,8 @@ function (widget, args)
   elseif (args[2] <= 10 and batstate() == 'Discharging') then
     baticon:set_image(beautiful.widget_battery_low)
     naughty.notify({
-      text = "attacca il cavo!",
-      title = "Carica bassa",
+      text = "conectaaa",
+      title = "Te acercas al limite de bateria...",
       position = "top_right",
       timeout = 1,
       fg="#ffffff",
@@ -693,7 +696,7 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey,           }, "w", function () mymainmenu:show({keygrabber=true}) end),
 
     -- Show/Hide Wibox
-    awful.key({ modkey }, "b", function ()
+    awful.key({ modkey }, "a", function ()
     mywibox[mouse.screen].visible = not mywibox[mouse.screen].visible
     end),
 
@@ -710,7 +713,9 @@ globalkeys = awful.util.table.join(
                 client.focus:raise()
             end
         end),
+    
 
+    awful.key({modkey,            }, "b", function() awful.util.spawn("xscreensaver-command -lock") end), 
     -- Standard program
     awful.key({ modkey,           }, "Return", function () awful.util.spawn(terminal) end),
     awful.key({ modkey, "Control" }, "r", awesome.restart),
@@ -726,7 +731,8 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey, "Control" }, "n", awful.client.restore),
 
     -- Dropdown terminal
-    awful.key({ modkey,	          }, "z",     function () scratch.drop(terminal) end),
+    awful.key({ modkey,	          }, "F12",     function () scratch.drop(terminal, "top", nil, nil, 0.25, "sticky") end),
+    --awful.key({ modkey,	          }, "F12",     function () scratch.drop("guake", "top", nil, nil, 0.25, "sticky") end),
 
     -- Widgets popups
     awful.key({ altkey,           }, "c",     function () add_calendar(7) end),
@@ -776,10 +782,13 @@ globalkeys = awful.util.table.join(
 
     -- User programs
     awful.key({ modkey,        }, "q",      function () awful.util.spawn( "dwb", false ) end),
-    awful.key({ modkey,        }, "a",      function () awful.util.spawn( "midori", false ) end),
+    --awful.key({ modkey,        }, "a",      function () awful.util.spawn( "midori", false ) end),
     awful.key({ modkey,        }, "s",      function () awful.util.spawn(gui_editor) end),
     awful.key({ modkey, 	     }, "t", 	    function () awful.util.spawn( "thunderbird", false ) end),
     awful.key({ modkey,        }, "d", 	    function () awful.util.spawn( "spacefm", false ) end),
+
+    --My own shortcuts
+    awful.key({modkey,		   }, "k",		function () awful.util.spawn( "keepass", false ) end),
 
     -- Prompt
     awful.key({ modkey }, "r", function () mypromptbox[mouse.screen]:run() end),
@@ -895,7 +904,7 @@ awful.rules.rules = {
      	  properties = { tag = tags[1][3] } },
 
     { rule = { class = "Thunderbird" },
-          properties = { tag = tags[1][3] } },
+          properties = { tag = tags[1][8] } },
 
     { rule = { class = "Dia" },
           properties = { tag = tags[1][4],
