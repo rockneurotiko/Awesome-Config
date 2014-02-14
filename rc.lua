@@ -1,8 +1,16 @@
+--[[               Original              ]]--
 --[[                                     ]]--
---                                         -
+--                                         --
 --    Steamburn Awesome WM 3.5.+ config    --
 --        github.com/copycat-killer        --
 --                                          -
+--[[                                     ]]--
+
+--[[            Modified by:             ]]--
+--                                         --
+--             Rock Neurotiko              --
+--        github.com/rockneurotiko         --
+--                                         --
 --[[                                     ]]--
 
 
